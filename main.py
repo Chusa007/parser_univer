@@ -19,10 +19,11 @@ makarov = [{"name": "09.04.02 Информационные системы и т�
             "table_id": 1,
             "places": 'мест 15, 0 из них целевая квота',
             "last_date": "18 августа"},
-           {"name": "10.04.01 Информационная безопасность (Технологии построения защищённых информационных систем на транспорте)",
-            "table_id": 0,
-            "places": 'мест 10, 0 из них целевая квота',
-            "last_date": "18 августа"}]
+           {
+               "name": "10.04.01 Информационная безопасность (Технологии построения защищённых информационных систем на транспорте)",
+               "table_id": 0,
+               "places": 'мест 10, 0 из них целевая квота',
+               "last_date": "18 августа"}]
 
 
 def parse_guap(url: str):
@@ -47,12 +48,20 @@ def parse_guap(url: str):
                 name_key_dict = j.contents[0]
             position += 1
 
-
         users_dict[info] = int(name_key_dict)
 
     list_values = sorted(users_dict.items(), key=lambda x: x[1], reverse=True)
+    k = 1
     for i in list_values:
-        print(i[0])
+        s = i[0].split()
+        if s[5] == 'Да':
+            print(k, s[0], s[1], s[2], s[3], s[4], s[5].upper())
+            k += 1
+    for i in list_values:
+        s = i[0].split()
+        if s[5] == 'Нет':
+            print(k, s[0], s[1], s[2], s[3], s[4], s[5].lower())
+            k += 1
 
 
 def parse_makarov(table_number: int):
@@ -70,9 +79,9 @@ def parse_makarov(table_number: int):
     print("№\tФИО\tСумма баллов\tСогласие на зачисление\tСогласие на другом направлении")
     for i in table_tag[1:]:
         if position < 3 or position == 7 or position == 8:
-            info += i.contents[0] + " "
+            info += str(i.contents[0]) + " "
         elif position == 9:
-            info += i.contents[0] + "\n"
+            info += str(i.contents[0]) + "\n"
             position = 0
             continue
         position += 1
